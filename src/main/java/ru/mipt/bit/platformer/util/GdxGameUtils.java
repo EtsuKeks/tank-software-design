@@ -19,9 +19,6 @@ import static com.badlogic.gdx.math.MathUtils.clamp;
 
 public final class GdxGameUtils {
 
-    private GdxGameUtils() {
-    }
-
     public static MapRenderer createSingleLayerMapRenderer(TiledMap tiledMap, Batch batch) {
         TiledMapTileLayer tileLayer = getSingleLayer(tiledMap);
         float viewWidth = tileLayer.getWidth() * tileLayer.getTileWidth();
