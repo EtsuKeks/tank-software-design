@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
-public class TankGraphicModel {
+public class TankGraphicModel implements IGraphicModel {
     private final Rectangle rectangle;
     private final Texture texture;
     private final TextureRegion graphics;
@@ -24,10 +24,12 @@ public class TankGraphicModel {
         this.rotation = rotation;
     }
 
+    @Override
     public void dispose() {
         texture.dispose();
     }
 
+    @Override
     public void render(Batch batch) {
         drawTextureRegionUnscaled(batch, graphics, rectangle, rotation);
     }

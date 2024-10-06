@@ -32,10 +32,10 @@ public class GameDesktopLauncher implements ApplicationListener {
     private TiledMap level;
     private MapRenderer levelRenderer;
 
-    private TankGraphicModel tankGraphicModel;
+    private IGraphicModel tankGraphicModel;
     private TankLogicModel tankLogicModel;
     
-    private final ArrayList<TreeGraphicModel> treeGraphicModels = new ArrayList<>();
+    private final ArrayList<IGraphicModel> treeGraphicModels = new ArrayList<>();
     private final ArrayList<TreeLogicModel> treeLogicModels = new ArrayList<>();
     private final ArrayList<Handler> handlers = new ArrayList<>();
 
@@ -73,7 +73,7 @@ public class GameDesktopLauncher implements ApplicationListener {
             Rectangle rectangle = GdxGameUtils.createBoundingRectangle(graphics);
             GdxGameUtils.moveRectangleAtTileCenter(layer, rectangle, new GridPoint2(coordinate.x, coordinate.y));
 
-            treeGraphicModels.add(new TreeGraphicModel(rectangle, texturePath, layer));
+            treeGraphicModels.add(new TreeGraphicModel(rectangle, texturePath));
             treeLogicModels.add(new TreeLogicModel(coordinate.x, coordinate.y));
         }
     }
@@ -91,7 +91,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         tankGraphicModel.render(batch);
 
-        for (TreeGraphicModel treeGraphicModel: treeGraphicModels) {
+        for (IGraphicModel treeGraphicModel: treeGraphicModels) {
             treeGraphicModel.render(batch);
         }
 
@@ -120,7 +120,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     public void dispose() {
         tankGraphicModel.dispose();
 
-        for (TreeGraphicModel treeGraphicModel: treeGraphicModels) {
+        for (IGraphicModel treeGraphicModel: treeGraphicModels) {
             treeGraphicModel.dispose();
         }
 

@@ -2,6 +2,7 @@ package ru.mipt.bit.platformer.logicmodels;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 import ru.mipt.bit.platformer.util.Direction;
+import ru.mipt.bit.platformer.util.IDirection;
 import ru.mipt.bit.platformer.util.TileMovement;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
@@ -31,7 +32,7 @@ public class TankLogicModel {
         return coordinates;
     }
 
-    public boolean move(Direction direction) {
+    public boolean move(IDirection direction) {
         boolean isDirectionAccepted = false;
         if (isEqual(movementProgress, 1f) && isMovementAcceptable(direction)) {
             GridPoint2 potentialDestination = direction.getNextCoordinates(coordinates);
@@ -52,7 +53,7 @@ public class TankLogicModel {
         }
     }
 
-    private boolean isMovementAcceptable(Direction direction) {
+    private boolean isMovementAcceptable(IDirection direction) {
         if (direction == Direction.NULL) {
             return false;
         }
@@ -66,9 +67,5 @@ public class TankLogicModel {
         }
 
         return true;
-    }
-
-    public void setCoordinates(int i, int i1) {
-        coordinates.set(new GridPoint2(i, i1));
     }
 }
