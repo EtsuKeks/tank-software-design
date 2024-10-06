@@ -6,25 +6,24 @@ import com.badlogic.gdx.math.GridPoint2;
 public enum Direction {
     UP(Input.Keys.UP, Input.Keys.W, 0, 1, 90f),
     DOWN(Input.Keys.DOWN, Input.Keys.S, 0, -1, -90f),
-    LEFT(Input.Keys.LEFT, Input.Keys.A, -1, 0, -180f),
-    RIGHT(Input.Keys.RIGHT, Input.Keys.D, 1, 0, 0f);
+    LEFT(Input.Keys.LEFT, Input.Keys.A, -1, 0, 180f),
+    RIGHT(Input.Keys.RIGHT, Input.Keys.D, 1, 0, 0f),
+    NULL(Input.Keys.UNKNOWN, Input.Keys.UNKNOWN, 0, 0, 0f);
 
-    private final int keyCode;
+    private final int primaryKeyCode;
     private final int secondaryKeyCode;
-    private final int deltaX;
-    private final int deltaY;
+    private final GridPoint2 directionVector;
     private final float rotation;
 
-    Direction(int keyCode, int secondaryKeyCode, int deltaX, int deltaY, float rotation) {
-        this.keyCode = keyCode;
+    Direction(int primaryKeyCode, int secondaryKeyCode, int deltaX, int deltaY, float rotation) {
+        this.primaryKeyCode = primaryKeyCode;
         this.secondaryKeyCode = secondaryKeyCode;
-        this.deltaX = deltaX;
-        this.deltaY = deltaY;
+        this.directionVector = new GridPoint2(deltaX, deltaY);
         this.rotation = rotation;
     }
 
-    public int getKeyCode() {
-        return keyCode;
+    public int getPrimaryKeyCode() {
+        return primaryKeyCode;
     }
 
     public int getSecondaryKeyCode() {
@@ -32,7 +31,7 @@ public enum Direction {
     }
 
     public GridPoint2 getNextCoordinates(GridPoint2 current) {
-        return new GridPoint2(current.x + deltaX, current.y + deltaY);
+        return new GridPoint2(current.x + directionVector.x, current.y + directionVector.y);
     }
 
     public float getRotation() {

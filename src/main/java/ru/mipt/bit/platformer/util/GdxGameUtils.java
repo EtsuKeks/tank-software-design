@@ -32,37 +32,20 @@ public final class GdxGameUtils {
 
     public static <L extends MapLayer> L getSingleLayer(Map map) {
         MapLayers layers = map.getLayers();
-        switch (layers.size()) {
-            case 0:
-                throw new NoSuchElementException("Map has no layers");
-            case 1:
+        return switch (layers.size()) {
+            case 0 -> throw new NoSuchElementException("Map has no layers");
+            case 1 -> {
                 @SuppressWarnings("unchecked")
                 L layer = (L) layers.iterator().next();
-                return layer;
-            default:
-                throw new IllegalArgumentException("Map has more than one layer");
-        }
+                yield layer;
+            }
+            default -> throw new IllegalArgumentException("Map has more than one layer");
+        };
     }
 
     public static Rectangle moveRectangleAtTileCenter(TiledMapTileLayer tileLayer, Rectangle rectangle, GridPoint2 tileCoordinates) {
         Vector2 tileCenter = calculateTileCenter(tileLayer, tileCoordinates);
         return rectangle.setCenter(tileCenter);
-    }
-
-    public static GridPoint2 incrementedY(GridPoint2 point) {
-        return new GridPoint2(point).add(0, 1);
-    }
-
-    public static GridPoint2 decrementedX(GridPoint2 point) {
-        return new GridPoint2(point).sub(1, 0);
-    }
-
-    public static GridPoint2 decrementedY(GridPoint2 point) {
-        return new GridPoint2(point).sub(0, 1);
-    }
-
-    public static GridPoint2 incrementedX(GridPoint2 point) {
-        return new GridPoint2(point).add(1, 0);
     }
 
     public static void drawTextureRegionUnscaled(Batch batch, TextureRegion region, Rectangle rectangle, float rotation) {
