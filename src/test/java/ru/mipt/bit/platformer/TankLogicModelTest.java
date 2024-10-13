@@ -32,7 +32,7 @@ public class TankLogicModelTest {
         tileMovement = mock(TileMovement.class);
         obstacles = new ArrayList<>();
         obstacles.add(new TreeLogicModel(2, 2));
-        tankLogicModel = new TankLogicModel(rectangle, tileMovement, 1, 1, obstacles);
+        tankLogicModel = new TankLogicModel(rectangle, tileMovement, 0.4f, new GridPoint2( 1 ,1 ), obstacles);
     }
 
     @Test

@@ -17,14 +17,15 @@ public class TankLogicModel {
     private final GridPoint2 destinationCoordinates;
     private float movementProgress = 1f;
     private final TileMovement tileMovement;
-    private final float movementSpeed = 0.4f;
+    private final float movementSpeed;
     private final ArrayList<TreeLogicModel> obstacles;
 
-    public TankLogicModel(Rectangle rectangle, TileMovement tileMovement, int startX, int startY, ArrayList<TreeLogicModel> obstacles) {
+    public TankLogicModel(Rectangle rectangle, TileMovement tileMovement, float movementSpeed, GridPoint2 tankStartPos, ArrayList<TreeLogicModel> obstacles) {
         this.rectangle = rectangle;
-        this.coordinates = new GridPoint2(startX, startY);
+        this.coordinates = tankStartPos;
         this.destinationCoordinates = new GridPoint2(coordinates);
         this.tileMovement = tileMovement;
+        this.movementSpeed = movementSpeed;
         this.obstacles = obstacles;
     }
 
