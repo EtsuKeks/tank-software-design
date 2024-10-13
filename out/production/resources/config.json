@@ -1,0 +1,20 @@
+{
+  "movementSpeed": 0.4,
+  "tankTexturePath": "images/tank_blue.png",
+  "treeTexturePath": "images/greenTree.png",
+  "levelType": "file",
+  "levelDescPath": "level.txt",
+  "map": [
+    "___T__T___",
+    "__TT__TT_T",
+    "_________T",
+    "TTTT__T__T",
+    "_____X____",
+    "___TT__T_T",
+    "TT__T_T__T",
+    "__________"
+  ],
+  "mapSize": { "width": 10, "height": 8 },
+  "obstacleMinCount": 10,
+  "obstacleMaxCount": 15
+}
