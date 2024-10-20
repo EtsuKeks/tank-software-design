@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import org.junit.Before;
 import org.junit.Test;
+import ru.mipt.bit.platformer.logicmodels.Obstacle;
 import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
 import ru.mipt.bit.platformer.logicmodels.TreeLogicModel;
 import ru.mipt.bit.platformer.util.Direction;
@@ -20,7 +21,7 @@ public class TankLogicModelTest {
     private TankLogicModel tankLogicModel;
     private TileMovement tileMovement;
     private Rectangle rectangle;
-    private ArrayList<TreeLogicModel> obstacles;
+    private ArrayList<Obstacle> obstacles;
 
     @Before
     public void setUp() {
@@ -31,7 +32,7 @@ public class TankLogicModelTest {
         rectangle = new Rectangle(0, 0, 1, 1);
         tileMovement = mock(TileMovement.class);
         obstacles = new ArrayList<>();
-        obstacles.add(new TreeLogicModel(2, 2));
+        obstacles.add(new TreeLogicModel(new GridPoint2(2, 2)));
         tankLogicModel = new TankLogicModel(rectangle, tileMovement, 0.4f, new GridPoint2( 1 ,1 ), obstacles);
     }
 
