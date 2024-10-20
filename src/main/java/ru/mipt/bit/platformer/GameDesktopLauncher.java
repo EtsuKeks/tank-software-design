@@ -2,7 +2,6 @@ package ru.mipt.bit.platformer;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.getSingleLayer;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.createSingleLayerMapRenderer;
-import ru.mipt.bit.platformer.graphicmodels.*;
 import ru.mipt.bit.platformer.handlers.*;
 import ru.mipt.bit.platformer.keepers.GameKeeper;
 import ru.mipt.bit.platformer.util.TileMovement;
@@ -46,7 +45,8 @@ public class GameDesktopLauncher implements ApplicationListener {
             throw new RuntimeException(e);
         }
 
-        handlers.add(new MovementHandler(gameKeeper.tankGraphicModel, gameKeeper.tankLogicModel));
+        handlers.add(new MovementHandler(gameKeeper.playerTankGraphicModel, gameKeeper.playerTankLogicModel));
+        handlers.add(new RandomBotsHandler(gameKeeper.botTankGraphicModels, gameKeeper.botTankLogicModels));
     }
 
     @Override
@@ -60,11 +60,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         batch.begin();
 
-        gameKeeper.tankGraphicModel.render(batch);
-
-        for (IGraphicModel treeGraphicModel: gameKeeper.treeGraphicModels) {
-            treeGraphicModel.render(batch);
-        }
+        gameKeeper.render(batch);
 
         batch.end();
     }
@@ -89,12 +85,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void dispose() {
-        gameKeeper.tankGraphicModel.dispose();
-
-        for (IGraphicModel treeGraphicModel: gameKeeper.treeGraphicModels) {
-            treeGraphicModel.dispose();
-        }
-
+        gameKeeper.dispose();
         level.dispose();
         batch.dispose();
     }

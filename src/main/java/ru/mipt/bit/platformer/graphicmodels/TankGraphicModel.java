@@ -8,15 +8,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 public class TankGraphicModel implements IGraphicModel {
-    private final Rectangle rectangle;
     private final Texture texture;
     private final TextureRegion graphics;
+    private final Rectangle rectangle;
     private float rotation;
 
     public TankGraphicModel(Rectangle rectangle, String texturePath) {
-        this.rectangle = rectangle;
         this.texture = new Texture(texturePath);
         this.graphics = new TextureRegion(texture);
+        this.rectangle = rectangle;
         this.rotation = 0f;
     }
 
