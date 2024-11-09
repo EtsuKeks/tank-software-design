@@ -47,8 +47,8 @@ public class GameDesktopLauncher implements ApplicationListener {
         }
 
         handlers.add(new ToggleHealthBarHandler(modelZooKeeper));
-        handlers.add(new MovementHandler(modelZooKeeper));
-        handlers.add(new RandomBotsHandler(modelZooKeeper));
+        handlers.add(new MovementPlayerHandler(modelZooKeeper));
+        handlers.add(new MovementBotsHandler(modelZooKeeper));
     }
 
     @Override

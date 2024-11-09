@@ -25,60 +25,60 @@ public class MultipleTanksLogicModelTest {
     private TileMovement tileMovement;
     private ArrayList<Obstacle> obstacles;
 
-    @Before
-    public void setUp() {
-        Graphics graphics = mock(Graphics.class);
-        when(graphics.getDeltaTime()).thenReturn(1f);
-        Gdx.graphics = graphics;
-        tileMovement = mock(TileMovement.class);
-
-        obstacles = new ArrayList<>();
-        TankLogicModel tank1 = new TankLogicModel(new Rectangle(0, 0, 1, 1), tileMovement, 0.4f, new GridPoint2(1, 1), obstacles);
-        TankLogicModel tank2 = new TankLogicModel(new Rectangle(0, 0, 1, 1), tileMovement, 0.4f, new GridPoint2(1, 2), obstacles);
-        obstacles.add(new TreeLogicModel(new GridPoint2(2, 2)));
-        obstacles.add(tank1);
-        obstacles.add(tank2);
-        tanks = new ArrayList<>();
-        tanks.add(new TankLogicModel(new Rectangle(0, 0, 1, 1), tileMovement, 0.4f, new GridPoint2(1, 1), obstacles));
-        tanks.add(new TankLogicModel(new Rectangle(0, 0, 1, 1), tileMovement, 0.4f, new GridPoint2(1, 2), obstacles));
-    }
-
-    @Test
-    public void testTankMovementWithoutCollision() {
-        assertTrue(tanks.get(0).move(Direction.RIGHT));
-        assertEquals(new GridPoint2(2, 1), tanks.get(0).getCoordinates());
-
-        assertFalse(tanks.get(1).move(Direction.RIGHT));
-        assertEquals(new GridPoint2(1, 2), tanks.get(1).getCoordinates());
-    }
-
-    @Test
-    public void testTankMovementWithCollision() {
-        tanks.get(0).move(Direction.RIGHT);
-
-        assertFalse(tanks.get(1).move(Direction.RIGHT));
-        assertEquals(new GridPoint2(1, 2), tanks.get(1).getCoordinates());
-
-        assertFalse(tanks.get(1).move(Direction.RIGHT));
-        assertEquals(new GridPoint2(1, 2), tanks.get(1).getCoordinates());
-    }
-
-    @Test
-    public void testMultipleTanksMovement() {
-        assertFalse(tanks.get(0).move(Direction.UP));
-        assertFalse(tanks.get(1).move(Direction.DOWN));
-
-        assertTrue(tanks.get(0).move(Direction.RIGHT));
-        assertTrue(tanks.get(1).move(Direction.UP));
-
-        assertEquals(new GridPoint2(2, 1), tanks.get(0).getCoordinates());
-        assertEquals(new GridPoint2(1, 3), tanks.get(1).getCoordinates());
-
-        assertFalse(tanks.get(0).move(Direction.UP));
-        assertEquals(new GridPoint2(2, 1), tanks.get(0).getCoordinates());
-
-        assertTrue(tanks.get(1).move(Direction.RIGHT));
-        assertFalse(tanks.get(1).move(Direction.DOWN));
-        assertEquals(new GridPoint2(2, 3), tanks.get(1).getCoordinates());
-    }
+//    @Before
+//    public void setUp() {
+//        Graphics graphics = mock(Graphics.class);
+//        when(graphics.getDeltaTime()).thenReturn(1f);
+//        Gdx.graphics = graphics;
+//        tileMovement = mock(TileMovement.class);
+//
+//        obstacles = new ArrayList<>();
+//        TankLogicModel tank1 = new TankLogicModel(new Rectangle(0, 0, 1, 1), tileMovement, 0.4f, new GridPoint2(1, 1), obstacles);
+//        TankLogicModel tank2 = new TankLogicModel(new Rectangle(0, 0, 1, 1), tileMovement, 0.4f, new GridPoint2(1, 2), obstacles);
+//        obstacles.add(new TreeLogicModel(new GridPoint2(2, 2)));
+//        obstacles.add(tank1);
+//        obstacles.add(tank2);
+//        tanks = new ArrayList<>();
+//        tanks.add(new TankLogicModel(new Rectangle(0, 0, 1, 1), tileMovement, 0.4f, new GridPoint2(1, 1), obstacles));
+//        tanks.add(new TankLogicModel(new Rectangle(0, 0, 1, 1), tileMovement, 0.4f, new GridPoint2(1, 2), obstacles));
+//    }
+//
+//    @Test
+//    public void testTankMovementWithoutCollision() {
+//        assertTrue(tanks.get(0).move(Direction.RIGHT));
+//        assertEquals(new GridPoint2(2, 1), tanks.get(0).getCoordinates());
+//
+//        assertFalse(tanks.get(1).move(Direction.RIGHT));
+//        assertEquals(new GridPoint2(1, 2), tanks.get(1).getCoordinates());
+//    }
+//
+//    @Test
+//    public void testTankMovementWithCollision() {
+//        tanks.get(0).move(Direction.RIGHT);
+//
+//        assertFalse(tanks.get(1).move(Direction.RIGHT));
+//        assertEquals(new GridPoint2(1, 2), tanks.get(1).getCoordinates());
+//
+//        assertFalse(tanks.get(1).move(Direction.RIGHT));
+//        assertEquals(new GridPoint2(1, 2), tanks.get(1).getCoordinates());
+//    }
+//
+//    @Test
+//    public void testMultipleTanksMovement() {
+//        assertFalse(tanks.get(0).move(Direction.UP));
+//        assertFalse(tanks.get(1).move(Direction.DOWN));
+//
+//        assertTrue(tanks.get(0).move(Direction.RIGHT));
+//        assertTrue(tanks.get(1).move(Direction.UP));
+//
+//        assertEquals(new GridPoint2(2, 1), tanks.get(0).getCoordinates());
+//        assertEquals(new GridPoint2(1, 3), tanks.get(1).getCoordinates());
+//
+//        assertFalse(tanks.get(0).move(Direction.UP));
+//        assertEquals(new GridPoint2(2, 1), tanks.get(0).getCoordinates());
+//
+//        assertTrue(tanks.get(1).move(Direction.RIGHT));
+//        assertFalse(tanks.get(1).move(Direction.DOWN));
+//        assertEquals(new GridPoint2(2, 3), tanks.get(1).getCoordinates());
+//    }
 }

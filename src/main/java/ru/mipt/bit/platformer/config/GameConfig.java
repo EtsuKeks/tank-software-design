@@ -1,9 +1,11 @@
 package ru.mipt.bit.platformer.config;
 
 public class GameConfig {
-    public float movementSpeed;
+    public float tankMovementSpeed;
+    public float bulletMovementSpeed;
     public String tankTexturePath;
     public String treeTexturePath;
+    public String bulletTexturePath;
     public String levelType;
     public String levelDescPath;
     public MapSize mapSize;

@@ -11,10 +11,10 @@ import java.util.Collection;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
-public class RandomBotsHandler implements Handler {
+public class MovementBotsHandler implements Handler {
     private final Collection<MoveCommand> moveCommands = new ArrayList<>();
 
-    public RandomBotsHandler(ModelZooKeeper modelZooKeeper) {
+    public MovementBotsHandler(ModelZooKeeper modelZooKeeper) {
         for (TankLogicModel botTankLogicModel: modelZooKeeper.getBotTankModels().keySet()) {
             moveCommands.add(new MoveCommand(modelZooKeeper.getBotTankModels().get(botTankLogicModel),
                             botTankLogicModel, Direction.NULL));

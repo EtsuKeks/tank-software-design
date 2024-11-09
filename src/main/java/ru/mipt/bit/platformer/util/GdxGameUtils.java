@@ -12,13 +12,10 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
 import java.util.NoSuchElementException;
-
 import static com.badlogic.gdx.math.MathUtils.clamp;
 
 public final class GdxGameUtils {
-
     public static MapRenderer createSingleLayerMapRenderer(TiledMap tiledMap, Batch batch) {
         TiledMapTileLayer tileLayer = getSingleLayer(tiledMap);
         float viewWidth = tileLayer.getWidth() * tileLayer.getTileWidth();

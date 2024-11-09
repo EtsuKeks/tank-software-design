@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer.logicmodels;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
+import ru.mipt.bit.platformer.keepers.ModelZooKeeper;
 import ru.mipt.bit.platformer.util.Direction;
 import ru.mipt.bit.platformer.util.IDirection;
 import ru.mipt.bit.platformer.util.TileMovement;
@@ -13,6 +14,7 @@ import java.util.Collection;
 import java.util.Random;
 
 public class TankLogicModel implements Obstacle {
+    private final ModelZooKeeper modelZooKeeper;
     private final Rectangle rectangle;
     private final GridPoint2 coordinates;
     private final GridPoint2 destinationCoordinates;
@@ -23,7 +25,9 @@ public class TankLogicModel implements Obstacle {
     private float health;
     private final float totalHealth;
 
-    public TankLogicModel(Rectangle rectangle, TileMovement tileMovement, float movementSpeed, GridPoint2 tankStartPos, Collection<Obstacle> obstacles) {
+    public TankLogicModel(ModelZooKeeper modelZooKeeper, boolean playable, Rectangle rectangle, TileMovement tileMovement,
+                          float movementSpeed, GridPoint2 tankStartPos, Collection<Obstacle> obstacles) {
+        this.modelZooKeeper = modelZooKeeper;
         this.rectangle = rectangle;
         this.coordinates = tankStartPos;
         this.destinationCoordinates = new GridPoint2(coordinates);
@@ -32,11 +36,22 @@ public class TankLogicModel implements Obstacle {
         this.obstacles = obstacles;
         this.health = 80 + new Random().nextInt(21);
         this.totalHealth = this.health;
+
+        modelZooKeeper.notifyBorn(this, playable);
     }
 
     @Override
     public boolean isOccupied(GridPoint2 point){
         return coordinates.equals(point) || destinationCoordinates.equals(point);
+    }
+
+    @Override
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public float getHealthRatio() {
+        return health / totalHealth;
     }
 
     public boolean move(IDirection direction) {
@@ -76,10 +91,6 @@ public class TankLogicModel implements Obstacle {
         }
 
         return true;
-    }
-
-    public float getHealthRatio() {
-        return health / totalHealth;
     }
 
     public GridPoint2 getCoordinates() {

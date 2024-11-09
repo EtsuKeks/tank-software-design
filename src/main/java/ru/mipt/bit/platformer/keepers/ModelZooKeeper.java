@@ -8,12 +8,9 @@ import ru.mipt.bit.platformer.logicmodels.BulletLogicModel;
 import ru.mipt.bit.platformer.logicmodels.Obstacle;
 import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
 import ru.mipt.bit.platformer.logicmodels.TreeLogicModel;
-import ru.mipt.bit.platformer.util.GdxGameUtils;
 import ru.mipt.bit.platformer.util.TileMovement;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
@@ -22,8 +19,6 @@ import java.util.*;
 
 public class ModelZooKeeper {
     private final GameConfig config;
-    private TiledMapTileLayer groundLayer;
-    private TileMovement tileMovement;
 
     private TankLogicModel playerTankLogicModel;
     private IGraphicModel playerTankGraphicModel;
@@ -34,10 +29,8 @@ public class ModelZooKeeper {
 
     public ModelZooKeeper(String configFilePath, TiledMapTileLayer groundLayer, TileMovement tileMovement) throws IOException {
         config = ConfigLoader.loadConfig(configFilePath);
-        this.groundLayer = groundLayer;
-        this.tileMovement = tileMovement;
 
-        GameInitializer initializer = new GameInitializer(config, this);
+        GameInitializer initializer = new GameInitializer(config, this, groundLayer, tileMovement);
         initializer.initialize();
     }
 
@@ -89,55 +82,40 @@ public class ModelZooKeeper {
         return obstacles;
     }
 
-    public void initBotTank(GridPoint2 coords) {
-        Rectangle botTankRectangle = initRectangle(groundLayer, config.tankTexturePath, coords);
-        TankLogicModel botTankLogicModel = new TankLogicModel(botTankRectangle, tileMovement, config.movementSpeed, coords, obstacles);
-
-        if (obstacles.contains(botTankLogicModel)) {
-            throw new IllegalArgumentException("There is already a model with coords = " + coords.toString());
+    public void notifyBorn(Object o, boolean playable) {
+        Obstacle obstacle = (Obstacle) o;
+        if (obstacles.contains(obstacle)) {
+            throw new IllegalArgumentException("There is already an obstacle as being notified from: " + obstacle.toString());
         }
-        obstacles.add(botTankLogicModel);
+        obstacles.add(obstacle);
 
-        TankGraphicModel botTankGraphicModelInner = new TankGraphicModel(botTankRectangle, config.tankTexturePath);
-        HealthBarDecorator botTankGraphicModel = new HealthBarDecorator(botTankGraphicModelInner, playerTankLogicModel);
-        botTankModels.put(botTankLogicModel, botTankGraphicModel);
+        Rectangle rectangle = obstacle.getRectangle();
+        switch (obstacle) {
+            case TankLogicModel tankLogicModel -> {
+                TankGraphicModel tankGraphicModelInner = new TankGraphicModel(rectangle, config.tankTexturePath);
+                HealthBarDecorator tankGraphicModel = new HealthBarDecorator(tankGraphicModelInner, tankLogicModel);
+                if (playable) {
+                    playerTankLogicModel = tankLogicModel;
+                    playerTankGraphicModel = tankGraphicModel;
+                } else {
+                    botTankModels.put(tankLogicModel, tankGraphicModel);
+                }
+            }
+            case TreeLogicModel treeLogicModel -> {
+                TreeGraphicModel treeGraphicModel = new TreeGraphicModel(rectangle, config.treeTexturePath);
+                treeModels.put(treeLogicModel, treeGraphicModel);
+            }
+            default -> {
+                throw new IllegalArgumentException("Class matching exception, got class " + obstacle.getClass());
+            }
+        }
     }
 
-    public void initPlayerTank(GridPoint2 coords) {
-        Rectangle playerTankRectangle = initRectangle(groundLayer, config.tankTexturePath, coords);
-        playerTankLogicModel = new TankLogicModel(playerTankRectangle, tileMovement, config.movementSpeed, coords, obstacles);
+    public void notifyDead(Object o) {
 
-        if (obstacles.contains(playerTankLogicModel)) {
-            throw new IllegalArgumentException("There is already a model with coords = " + coords.toString());
-        }
-        obstacles.add(playerTankLogicModel);
-
-        TankGraphicModel botTankGraphicModelInner = new TankGraphicModel(playerTankRectangle, config.tankTexturePath);
-        playerTankGraphicModel = new HealthBarDecorator(botTankGraphicModelInner, playerTankLogicModel);
-    }
-
-    public void initTree(GridPoint2 coords) {
-        Rectangle treeRectangle = initRectangle(groundLayer, config.treeTexturePath, coords);
-        TreeLogicModel treeLogicModel = new TreeLogicModel(coords);
-
-        if (obstacles.contains(treeLogicModel)) {
-            throw new IllegalArgumentException("There is already a model with coords = " + coords.toString());
-        }
-        obstacles.add(treeLogicModel);
-
-        TreeGraphicModel treeGraphicModel = new TreeGraphicModel(treeRectangle, config.treeTexturePath);
-        treeModels.put(treeLogicModel, treeGraphicModel);
     }
 
     public void initBullet(GridPoint2 coords) {
 
-    }
-
-    private Rectangle initRectangle(TiledMapTileLayer groundLayer, String texturePath, GridPoint2 coordinate) {
-        Texture texture = new Texture(texturePath);
-        TextureRegion graphics = new TextureRegion(texture);
-        Rectangle rectangle = GdxGameUtils.createBoundingRectangle(graphics);
-        GdxGameUtils.moveRectangleAtTileCenter(groundLayer, rectangle, coordinate);
-        return rectangle;
     }
 }

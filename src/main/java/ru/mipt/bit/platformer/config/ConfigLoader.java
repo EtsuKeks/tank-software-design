@@ -18,8 +18,12 @@ public class ConfigLoader {
     }
 
     private static GameConfig checkConfig(GameConfig config) throws IllegalArgumentException, IOException {
-        if (config.movementSpeed <= 0) {
-            throw new IllegalArgumentException("In config.json movementSpeed must be nonnegative, got " + config.movementSpeed);
+        if (config.tankMovementSpeed <= 0) {
+            throw new IllegalArgumentException("In config.json movementSpeed must be nonnegative, got " + config.tankMovementSpeed);
+        }
+
+        if (config.bulletMovementSpeed <= 0) {
+            throw new IllegalArgumentException("In config.json movementSpeed must be nonnegative, got " + config.bulletMovementSpeed);
         }
 
         checkFilePathForExistence(config.tankTexturePath);

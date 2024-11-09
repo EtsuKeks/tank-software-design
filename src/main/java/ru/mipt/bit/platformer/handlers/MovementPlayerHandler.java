@@ -7,10 +7,10 @@ import ru.mipt.bit.platformer.util.IDirection;
 
 import com.badlogic.gdx.Gdx;
 
-public class MovementHandler implements Handler {
+public class MovementPlayerHandler implements Handler {
     private final MoveCommand moveCommand;
 
-    public MovementHandler(ModelZooKeeper modelZooKeeper) {
+    public MovementPlayerHandler(ModelZooKeeper modelZooKeeper) {
         moveCommand = new MoveCommand(
                 modelZooKeeper.getPlayerTankGraphicModel(),
                 modelZooKeeper.getPlayerTankLogicModel(),

@@ -1,7 +1,9 @@
 {
-  "movementSpeed": 0.4,
+  "tankMovementSpeed": 0.4,
+  "bulletMovementSpeed": 1.2,
   "tankTexturePath": "images/tank_blue.png",
   "treeTexturePath": "images/greenTree.png",
+  "bulletTexturePath": "images/bullet.png",
   "levelType": "file",
   "levelDescPath": "levelModels.txt",
   "mapSize": { "width": 10, "height": 8 },

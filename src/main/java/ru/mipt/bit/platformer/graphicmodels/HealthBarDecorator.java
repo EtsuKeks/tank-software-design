@@ -1,9 +1,10 @@
 package ru.mipt.bit.platformer.graphicmodels;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import ru.mipt.bit.platformer.graphicmodels.texturefactories.TextureFactory;
 import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class HealthBarDecorator implements IGraphicModel {
     private final TankGraphicModel tankGraphicModel;
