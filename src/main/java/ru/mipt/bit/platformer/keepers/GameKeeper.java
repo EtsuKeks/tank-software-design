@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import ru.mipt.bit.platformer.config.ConfigLoader;
 import ru.mipt.bit.platformer.config.GameConfig;
+import ru.mipt.bit.platformer.graphicmodels.HealthBarDecorator;
 import ru.mipt.bit.platformer.graphicmodels.IGraphicModel;
 import ru.mipt.bit.platformer.graphicmodels.TankGraphicModel;
 import ru.mipt.bit.platformer.graphicmodels.TreeGraphicModel;
@@ -164,13 +165,17 @@ public class GameKeeper {
 
         for (GridPoint2 botTankCoordinate: botTankStartCoordinates) {
             Rectangle botTankRectangle = initRectangle(groundLayer, config.tankTexturePath, botTankCoordinate);
-            botTankGraphicModels.add(new TankGraphicModel(botTankRectangle, config.tankTexturePath));
+            TankGraphicModel botTankGraphicModel = new TankGraphicModel(botTankRectangle, config.tankTexturePath);
+            TankLogicModel botTankLogicModel = new TankLogicModel(botTankRectangle, tileMovement, config.movementSpeed, botTankCoordinate, obstacles);
+
+            botTankGraphicModels.add(new HealthBarDecorator(botTankGraphicModel, botTankLogicModel));
             botTankLogicModels.add(new TankLogicModel(botTankRectangle, tileMovement, config.movementSpeed, botTankCoordinate, obstacles));
         }
 
         Rectangle playerTankRectangle = initRectangle(groundLayer, config.tankTexturePath, playerTankStartCoordinate);
-        playerTankGraphicModel = new TankGraphicModel(playerTankRectangle, config.tankTexturePath);
+        TankGraphicModel playerTankGraphicModelInner = new TankGraphicModel(playerTankRectangle, config.tankTexturePath);
         playerTankLogicModel = new TankLogicModel(playerTankRectangle, tileMovement, config.movementSpeed, playerTankStartCoordinate, obstacles);
+        playerTankGraphicModel = new HealthBarDecorator(playerTankGraphicModelInner, playerTankLogicModel);
 
         obstacles.addAll(botTankLogicModels);
         obstacles.addAll(treeLogicModels);

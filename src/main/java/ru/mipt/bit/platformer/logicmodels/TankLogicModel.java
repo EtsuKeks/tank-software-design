@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TankLogicModel implements Obstacle {
     private final Rectangle rectangle;
@@ -19,6 +20,8 @@ public class TankLogicModel implements Obstacle {
     private final TileMovement tileMovement;
     private final float movementSpeed;
     private final ArrayList<Obstacle> obstacles;
+    private float health;
+    private final float totalHealth;
 
     public TankLogicModel(Rectangle rectangle, TileMovement tileMovement, float movementSpeed, GridPoint2 tankStartPos, ArrayList<Obstacle> obstacles) {
         this.rectangle = rectangle;
@@ -27,6 +30,8 @@ public class TankLogicModel implements Obstacle {
         this.tileMovement = tileMovement;
         this.movementSpeed = movementSpeed;
         this.obstacles = obstacles;
+        this.health = 80 + new Random().nextInt(21);
+        this.totalHealth = this.health;
     }
 
     @Override
@@ -68,6 +73,10 @@ public class TankLogicModel implements Obstacle {
         }
 
         return true;
+    }
+
+    public float getHealthRatio() {
+        return health / totalHealth;
     }
 
     public GridPoint2 getCoordinates() {

@@ -4,7 +4,7 @@ import ru.mipt.bit.platformer.graphicmodels.IGraphicModel;
 import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
 import ru.mipt.bit.platformer.util.IDirection;
 
-public class MoveCommand {
+public class MoveCommand implements Command {
     private final TankLogicModel tankLogicModel;
     private final IGraphicModel tankGraphicModel;
     private IDirection direction;
@@ -19,6 +19,7 @@ public class MoveCommand {
         this.direction = direction;
     }
 
+    @Override
     public void execute() {
         if (tankLogicModel.move(direction)) {
             tankGraphicModel.setRotation(direction.getRotation());
