@@ -9,7 +9,7 @@ import static com.badlogic.gdx.math.MathUtils.isEqual;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 public class TankLogicModel implements Obstacle {
@@ -19,11 +19,11 @@ public class TankLogicModel implements Obstacle {
     private float movementProgress = 1f;
     private final TileMovement tileMovement;
     private final float movementSpeed;
-    private final ArrayList<Obstacle> obstacles;
+    private final Collection<Obstacle> obstacles;
     private float health;
     private final float totalHealth;
 
-    public TankLogicModel(Rectangle rectangle, TileMovement tileMovement, float movementSpeed, GridPoint2 tankStartPos, ArrayList<Obstacle> obstacles) {
+    public TankLogicModel(Rectangle rectangle, TileMovement tileMovement, float movementSpeed, GridPoint2 tankStartPos, Collection<Obstacle> obstacles) {
         this.rectangle = rectangle;
         this.coordinates = tankStartPos;
         this.destinationCoordinates = new GridPoint2(coordinates);
@@ -68,6 +68,9 @@ public class TankLogicModel implements Obstacle {
         GridPoint2 potentialDestination = direction.getNextCoordinates(coordinates);
         for (Obstacle obstacle: obstacles) {
             if (obstacle.isOccupied(potentialDestination)) {
+                if (obstacle instanceof TankLogicModel && ((TankLogicModel) obstacle).equals(this)) {
+                    continue;
+                }
                 return false;
             }
         }

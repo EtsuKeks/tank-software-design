@@ -3,7 +3,7 @@ package ru.mipt.bit.platformer;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.getSingleLayer;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.createSingleLayerMapRenderer;
 import ru.mipt.bit.platformer.handlers.*;
-import ru.mipt.bit.platformer.keepers.GameKeeper;
+import ru.mipt.bit.platformer.keepers.ModelZooKeeper;
 import ru.mipt.bit.platformer.util.TileMovement;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
@@ -21,33 +21,34 @@ import com.badlogic.gdx.math.Interpolation;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GameDesktopLauncher implements ApplicationListener {
     private Batch batch;
     private TiledMap level;
     private MapRenderer levelRenderer;
 
-    private GameKeeper gameKeeper;
-    private final ArrayList<Handler> handlers = new ArrayList<>();
+    private ModelZooKeeper modelZooKeeper;
+    private final List<Handler> handlers = new ArrayList<>();
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-
         level = new TmxMapLoader().load("level.tmx");
         levelRenderer = createSingleLayerMapRenderer(level, batch);
+
         TiledMapTileLayer groundLayer = getSingleLayer(level);
         TileMovement tileMovement = new TileMovement(groundLayer, Interpolation.smooth);
 
         try {
-            gameKeeper = new GameKeeper("config.json", groundLayer, tileMovement);
+            modelZooKeeper = new ModelZooKeeper("config.json", groundLayer, tileMovement);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        handlers.add(new ToggleHealthBarHandler(gameKeeper.botTankGraphicModels, gameKeeper.playerTankGraphicModel));
-        handlers.add(new MovementHandler(gameKeeper.playerTankGraphicModel, gameKeeper.playerTankLogicModel));
-        handlers.add(new RandomBotsHandler(gameKeeper.botTankGraphicModels, gameKeeper.botTankLogicModels));
+        handlers.add(new ToggleHealthBarHandler(modelZooKeeper));
+        handlers.add(new MovementHandler(modelZooKeeper));
+        handlers.add(new RandomBotsHandler(modelZooKeeper));
     }
 
     @Override
@@ -61,7 +62,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         batch.begin();
 
-        gameKeeper.render(batch);
+        modelZooKeeper.render(batch);
 
         batch.end();
     }
@@ -86,7 +87,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void dispose() {
-        gameKeeper.dispose();
+        modelZooKeeper.dispose();
         level.dispose();
         batch.dispose();
     }

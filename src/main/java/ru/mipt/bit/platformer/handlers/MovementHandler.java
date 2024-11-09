@@ -1,17 +1,20 @@
 package ru.mipt.bit.platformer.handlers;
 
-import com.badlogic.gdx.Gdx;
 import ru.mipt.bit.platformer.commands.MoveCommand;
-import ru.mipt.bit.platformer.graphicmodels.IGraphicModel;
-import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
+import ru.mipt.bit.platformer.keepers.ModelZooKeeper;
 import ru.mipt.bit.platformer.util.Direction;
 import ru.mipt.bit.platformer.util.IDirection;
+
+import com.badlogic.gdx.Gdx;
 
 public class MovementHandler implements Handler {
     private final MoveCommand moveCommand;
 
-    public MovementHandler(IGraphicModel tankGraphicModel, TankLogicModel tankLogicModel) {
-        moveCommand = new MoveCommand(tankGraphicModel, tankLogicModel, Direction.NULL);
+    public MovementHandler(ModelZooKeeper modelZooKeeper) {
+        moveCommand = new MoveCommand(
+                modelZooKeeper.getPlayerTankGraphicModel(),
+                modelZooKeeper.getPlayerTankLogicModel(),
+                Direction.NULL);
     }
 
     @Override

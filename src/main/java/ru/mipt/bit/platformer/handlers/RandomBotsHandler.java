@@ -1,32 +1,29 @@
 package ru.mipt.bit.platformer.handlers;
 
 import ru.mipt.bit.platformer.commands.MoveCommand;
-import ru.mipt.bit.platformer.graphicmodels.IGraphicModel;
+import ru.mipt.bit.platformer.keepers.ModelZooKeeper;
 import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
 import ru.mipt.bit.platformer.util.Direction;
 import ru.mipt.bit.platformer.util.IDirection;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
 public class RandomBotsHandler implements Handler {
-    private final ArrayList<MoveCommand> moveCommands = new ArrayList<>();
+    private final Collection<MoveCommand> moveCommands = new ArrayList<>();
 
-    public RandomBotsHandler(ArrayList<IGraphicModel> botTankGraphicModels, ArrayList<TankLogicModel> botTankLogicModels) {
-        if (botTankGraphicModels.size() != botTankLogicModels.size()) {
-            throw new IllegalArgumentException("Got botGraphicModels and botTankLogicModels of different sizes!");
-        }
-
-        for (int i = 0; i < botTankGraphicModels.size(); i++) {
-            moveCommands.add(new MoveCommand(botTankGraphicModels.get(i), botTankLogicModels.get(i), Direction.NULL));
+    public RandomBotsHandler(ModelZooKeeper modelZooKeeper) {
+        for (TankLogicModel botTankLogicModel: modelZooKeeper.getBotTankModels().keySet()) {
+            moveCommands.add(new MoveCommand(modelZooKeeper.getBotTankModels().get(botTankLogicModel),
+                            botTankLogicModel, Direction.NULL));
         }
     }
 
     @Override
     public void handleInput() {
         chooseDirections();
-
         for (MoveCommand moveCommand: moveCommands) {
             moveCommand.execute();
         }
