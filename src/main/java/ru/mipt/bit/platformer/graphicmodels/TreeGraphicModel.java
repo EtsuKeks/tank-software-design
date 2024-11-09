@@ -1,6 +1,6 @@
 package ru.mipt.bit.platformer.graphicmodels;
 
-import ru.mipt.bit.platformer.util.GdxGameUtils;
+import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -20,9 +20,8 @@ public class TreeGraphicModel implements IGraphicModel {
         this.rotation = 0f;
     }
 
-    @Override
-    public void render(Batch batch) {
-        GdxGameUtils.drawTextureRegionUnscaled(batch, graphics, rectangle, rotation);
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
     }
 
     @Override
@@ -30,7 +29,8 @@ public class TreeGraphicModel implements IGraphicModel {
         texture.dispose();
     }
 
-    public void setRotation(float rotation) {
-        this.rotation = rotation;
+    @Override
+    public void render(Batch batch) {
+        drawTextureRegionUnscaled(batch, graphics, rectangle, rotation);
     }
 }

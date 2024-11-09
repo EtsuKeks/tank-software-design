@@ -7,8 +7,10 @@ public class GameConfig {
     public String levelType;
     public String levelDescPath;
     public MapSize mapSize;
-    public int obstacleMinCount;
-    public int obstacleMaxCount;
+    public int treesMinCount;
+    public int treesMaxCount;
+    public int botTanksMinCount;
+    public int botTanksMaxCount;
 
     public static class MapSize {
         public int width;

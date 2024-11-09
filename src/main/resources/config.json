@@ -2,9 +2,11 @@
   "movementSpeed": 0.4,
   "tankTexturePath": "images/tank_blue.png",
   "treeTexturePath": "images/greenTree.png",
-  "levelType": "random",
+  "levelType": "file",
   "levelDescPath": "levelModels.txt",
   "mapSize": { "width": 10, "height": 8 },
-  "obstacleMinCount": 10,
-  "obstacleMaxCount": 15
+  "treesMinCount": 10,
+  "treesMaxCount": 15,
+  "botTanksMinCount": 5,
+  "botTanksMaxCount": 10
 }

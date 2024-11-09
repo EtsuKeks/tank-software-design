@@ -11,16 +11,16 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
 
-public class TankLogicModel {
+public class TankLogicModel implements Obstacle {
     private final Rectangle rectangle;
     private final GridPoint2 coordinates;
     private final GridPoint2 destinationCoordinates;
     private float movementProgress = 1f;
     private final TileMovement tileMovement;
     private final float movementSpeed;
-    private final ArrayList<TreeLogicModel> obstacles;
+    private final ArrayList<Obstacle> obstacles;
 
-    public TankLogicModel(Rectangle rectangle, TileMovement tileMovement, float movementSpeed, GridPoint2 tankStartPos, ArrayList<TreeLogicModel> obstacles) {
+    public TankLogicModel(Rectangle rectangle, TileMovement tileMovement, float movementSpeed, GridPoint2 tankStartPos, ArrayList<Obstacle> obstacles) {
         this.rectangle = rectangle;
         this.coordinates = tankStartPos;
         this.destinationCoordinates = new GridPoint2(coordinates);
@@ -29,8 +29,9 @@ public class TankLogicModel {
         this.obstacles = obstacles;
     }
 
-    public GridPoint2 getCoordinates() {
-        return coordinates;
+    @Override
+    public boolean isOccupied(GridPoint2 point){
+        return coordinates.equals(point) || destinationCoordinates.equals(point);
     }
 
     public boolean move(IDirection direction) {
@@ -60,13 +61,16 @@ public class TankLogicModel {
         }
 
         GridPoint2 potentialDestination = direction.getNextCoordinates(coordinates);
-        for (TreeLogicModel obstacle: obstacles) {
-            GridPoint2 obstacleCoordinates = obstacle.getCoordinates();
-            if (obstacleCoordinates.equals(potentialDestination)) {
+        for (Obstacle obstacle: obstacles) {
+            if (obstacle.isOccupied(potentialDestination)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public GridPoint2 getCoordinates() {
+        return coordinates;
     }
 }
