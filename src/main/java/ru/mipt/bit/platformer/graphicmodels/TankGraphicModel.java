@@ -20,6 +20,10 @@ public class TankGraphicModel implements IGraphicModel {
         this.rotation = 0f;
     }
 
+    public Rectangle getRectangle() {
+        return this.rectangle;
+    }
+
     public void setRotation(float rotation) {
         this.rotation = rotation;
     }

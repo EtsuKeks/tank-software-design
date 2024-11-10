@@ -45,6 +45,7 @@ public class GameDesktopLauncher implements ApplicationListener {
             throw new RuntimeException(e);
         }
 
+        handlers.add(new ToggleHealthBarHandler(gameKeeper.botTankGraphicModels, gameKeeper.playerTankGraphicModel));
         handlers.add(new MovementHandler(gameKeeper.playerTankGraphicModel, gameKeeper.playerTankLogicModel));
         handlers.add(new RandomBotsHandler(gameKeeper.botTankGraphicModels, gameKeeper.botTankLogicModels));
     }
