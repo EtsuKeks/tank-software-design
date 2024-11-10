@@ -1,6 +1,5 @@
-package ru.mipt.bit.platformer.keepers;
+package ru.mipt.bit.platformer.modelinitializers;
 
-import ru.mipt.bit.platformer.util.GameInitializer;
 import ru.mipt.bit.platformer.config.ConfigLoader;
 import ru.mipt.bit.platformer.config.GameConfig;
 import ru.mipt.bit.platformer.graphicmodels.*;
@@ -12,13 +11,12 @@ import ru.mipt.bit.platformer.util.TileMovement;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import java.io.IOException;
 import java.util.*;
 
 public class ModelZooKeeper {
-    private final GameConfig config;
+    public final GameConfig config;
 
     private TankLogicModel playerTankLogicModel;
     private IGraphicModel playerTankGraphicModel;
@@ -30,7 +28,7 @@ public class ModelZooKeeper {
     public ModelZooKeeper(String configFilePath, TiledMapTileLayer groundLayer, TileMovement tileMovement) throws IOException {
         config = ConfigLoader.loadConfig(configFilePath);
 
-        GameInitializer initializer = new GameInitializer(config, this, groundLayer, tileMovement);
+        ModelsInitializer initializer = new ModelsInitializer(this, groundLayer, tileMovement);
         initializer.initialize();
     }
 
@@ -44,6 +42,10 @@ public class ModelZooKeeper {
         for (IGraphicModel treeGraphicModel: treeModels.values()) {
             treeGraphicModel.render(batch);
         }
+
+        for (IGraphicModel bulletGraphicModel: bulletModels.values()) {
+            bulletGraphicModel.render(batch);
+        }
     }
 
     public void dispose() {
@@ -55,6 +57,10 @@ public class ModelZooKeeper {
 
         for (IGraphicModel treeGraphicModel: treeModels.values()) {
             treeGraphicModel.dispose();
+        }
+
+        for (IGraphicModel bulletGraphicModel: bulletModels.values()) {
+            bulletGraphicModel.dispose();
         }
     }
 
@@ -82,13 +88,12 @@ public class ModelZooKeeper {
         return obstacles;
     }
 
+    public GameConfig getConfig() {
+        return config;
+    }
+
     public void notifyBorn(Object o, boolean playable) {
         Obstacle obstacle = (Obstacle) o;
-        if (obstacles.contains(obstacle)) {
-            throw new IllegalArgumentException("There is already an obstacle as being notified from: " + obstacle.toString());
-        }
-        obstacles.add(obstacle);
-
         Rectangle rectangle = obstacle.getRectangle();
         switch (obstacle) {
             case TankLogicModel tankLogicModel -> {
@@ -100,10 +105,16 @@ public class ModelZooKeeper {
                 } else {
                     botTankModels.put(tankLogicModel, tankGraphicModel);
                 }
+                obstacles.add(obstacle);
             }
             case TreeLogicModel treeLogicModel -> {
                 TreeGraphicModel treeGraphicModel = new TreeGraphicModel(rectangle, config.treeTexturePath);
                 treeModels.put(treeLogicModel, treeGraphicModel);
+                obstacles.add(obstacle);
+            }
+            case BulletLogicModel bulletLogicModel -> {
+                BulletGraphicModel bulletGraphicModel = new BulletGraphicModel(rectangle, config.bulletTexturePath, bulletLogicModel.getRotation());
+                bulletModels.put(bulletLogicModel, bulletGraphicModel);
             }
             default -> {
                 throw new IllegalArgumentException("Class matching exception, got class " + obstacle.getClass());
@@ -111,11 +122,26 @@ public class ModelZooKeeper {
         }
     }
 
-    public void notifyDead(Object o) {
-
-    }
-
-    public void initBullet(GridPoint2 coords) {
+    public void notifyDead(Object o, boolean playable) {
+        Obstacle obstacle = (Obstacle) o;
+        switch (obstacle) {
+            case TankLogicModel tankLogicModel -> {
+                if (playable) {
+                    throw new IllegalArgumentException("For now, playerTank can not die");
+                } else {
+                    botTankModels.get(tankLogicModel).dispose();
+                    botTankModels.remove(tankLogicModel);
+                }
+                obstacles.remove(obstacle);
+            }
+            case BulletLogicModel bulletLogicModel -> {
+                bulletModels.get(bulletLogicModel).dispose();
+                bulletModels.remove(bulletLogicModel);
+            }
+            default -> {
+                throw new IllegalArgumentException("Class matching exception, got class " + obstacle.getClass());
+            }
+        }
 
     }
 }

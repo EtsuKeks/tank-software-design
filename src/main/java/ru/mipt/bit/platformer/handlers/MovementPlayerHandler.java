@@ -1,17 +1,17 @@
 package ru.mipt.bit.platformer.handlers;
 
-import ru.mipt.bit.platformer.commands.MoveCommand;
-import ru.mipt.bit.platformer.keepers.ModelZooKeeper;
+import ru.mipt.bit.platformer.commands.MoveTankCommand;
+import ru.mipt.bit.platformer.modelinitializers.ModelZooKeeper;
 import ru.mipt.bit.platformer.util.Direction;
 import ru.mipt.bit.platformer.util.IDirection;
 
 import com.badlogic.gdx.Gdx;
 
 public class MovementPlayerHandler implements Handler {
-    private final MoveCommand moveCommand;
+    private final MoveTankCommand moveTankCommand;
 
     public MovementPlayerHandler(ModelZooKeeper modelZooKeeper) {
-        moveCommand = new MoveCommand(
+        moveTankCommand = new MoveTankCommand(
                 modelZooKeeper.getPlayerTankGraphicModel(),
                 modelZooKeeper.getPlayerTankLogicModel(),
                 Direction.NULL);
@@ -20,7 +20,7 @@ public class MovementPlayerHandler implements Handler {
     @Override
     public void handleInput() {
         chooseDirection();
-        moveCommand.execute();
+        moveTankCommand.execute();
     }
 
     private void chooseDirection() {
@@ -32,6 +32,6 @@ public class MovementPlayerHandler implements Handler {
                 targetDirection = direction;
             }
         }
-        moveCommand.setDirection(targetDirection);
+        moveTankCommand.setDirection(targetDirection);
     }
 }

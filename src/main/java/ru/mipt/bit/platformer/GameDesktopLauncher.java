@@ -3,7 +3,7 @@ package ru.mipt.bit.platformer;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.getSingleLayer;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.createSingleLayerMapRenderer;
 import ru.mipt.bit.platformer.handlers.*;
-import ru.mipt.bit.platformer.keepers.ModelZooKeeper;
+import ru.mipt.bit.platformer.modelinitializers.ModelZooKeeper;
 import ru.mipt.bit.platformer.util.TileMovement;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
@@ -42,13 +42,14 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         try {
             modelZooKeeper = new ModelZooKeeper("config.json", groundLayer, tileMovement);
+            handlers.add(new ToggleHealthBarHandler(modelZooKeeper));
+            handlers.add(new MovementPlayerHandler(modelZooKeeper));
+            handlers.add(new MovementBotsHandler(modelZooKeeper));
+            handlers.add(new ShootPlayerHandler(modelZooKeeper, groundLayer, tileMovement));
+            handlers.add(new MovementBulletHandler(modelZooKeeper));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        handlers.add(new ToggleHealthBarHandler(modelZooKeeper));
-        handlers.add(new MovementPlayerHandler(modelZooKeeper));
-        handlers.add(new MovementBotsHandler(modelZooKeeper));
     }
 
     @Override

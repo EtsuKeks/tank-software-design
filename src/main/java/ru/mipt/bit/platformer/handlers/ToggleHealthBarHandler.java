@@ -2,7 +2,7 @@ package ru.mipt.bit.platformer.handlers;
 
 import ru.mipt.bit.platformer.commands.ToggleHealthBarCommand;
 import ru.mipt.bit.platformer.graphicmodels.IGraphicModel;
-import ru.mipt.bit.platformer.keepers.ModelZooKeeper;
+import ru.mipt.bit.platformer.modelinitializers.ModelZooKeeper;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Gdx;

@@ -38,6 +38,11 @@ public class HealthBarDecorator implements IGraphicModel {
     }
 
     @Override
+    public float getRotation() {
+        return tankGraphicModel.getRotation();
+    }
+
+    @Override
     public void setRotation(float rotation) {
         tankGraphicModel.setRotation(rotation);
     }

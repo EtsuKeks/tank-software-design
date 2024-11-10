@@ -21,9 +21,15 @@ public class TankGraphicModel implements IGraphicModel {
     }
 
     public Rectangle getRectangle() {
-        return this.rectangle;
+        return rectangle;
     }
 
+    @Override
+    public float getRotation() {
+        return rotation;
+    }
+
+    @Override
     public void setRotation(float rotation) {
         this.rotation = rotation;
     }

@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.util;
+package ru.mipt.bit.platformer.modelinitializers;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -6,7 +6,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.config.ConfigLoader;
 import ru.mipt.bit.platformer.config.GameConfig;
-import ru.mipt.bit.platformer.keepers.ModelZooKeeper;
 
 import java.io.*;
 import java.util.Random;
@@ -14,15 +13,18 @@ import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.logicmodels.Obstacle;
 import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
 import ru.mipt.bit.platformer.logicmodels.TreeLogicModel;
+import ru.mipt.bit.platformer.util.GdxGameUtils;
+import ru.mipt.bit.platformer.util.TileMovement;
 
-public class GameInitializer {
+public class ModelsInitializer {
     private final GameConfig config;
     private final ModelZooKeeper modelZooKeeper;
     private final TiledMapTileLayer groundLayer;
     private final TileMovement tileMovement;
 
-    public GameInitializer(GameConfig config, ModelZooKeeper modelZooKeeper, TiledMapTileLayer groundLayer, TileMovement tileMovement) {
-        this.config = config;
+    public ModelsInitializer(ModelZooKeeper modelZooKeeper,
+                             TiledMapTileLayer groundLayer, TileMovement tileMovement) throws IOException {
+        config = modelZooKeeper.getConfig();
         this.modelZooKeeper = modelZooKeeper;
         this.groundLayer = groundLayer;
         this.tileMovement = tileMovement;
@@ -134,8 +136,7 @@ public class GameInitializer {
 
     private void initTank(GridPoint2 coords, boolean playable) {
         Rectangle playerTankRectangle = initRectangle(groundLayer, config.tankTexturePath, coords);
-        new TankLogicModel(modelZooKeeper, playable, playerTankRectangle, tileMovement, config.tankMovementSpeed,
-                coords, modelZooKeeper.getObstacles());
+        new TankLogicModel(modelZooKeeper, playable, playerTankRectangle, tileMovement, config.tankMovementSpeed, coords);
     }
 
     private Rectangle initRectangle(TiledMapTileLayer groundLayer, String texturePath, GridPoint2 coordinate) {

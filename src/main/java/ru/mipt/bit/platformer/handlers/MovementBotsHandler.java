@@ -1,40 +1,42 @@
 package ru.mipt.bit.platformer.handlers;
 
-import ru.mipt.bit.platformer.commands.MoveCommand;
-import ru.mipt.bit.platformer.keepers.ModelZooKeeper;
+import ru.mipt.bit.platformer.commands.MoveTankCommand;
+import ru.mipt.bit.platformer.modelinitializers.ModelZooKeeper;
 import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
 import ru.mipt.bit.platformer.util.Direction;
 import ru.mipt.bit.platformer.util.IDirection;
 
+import static com.badlogic.gdx.math.MathUtils.random;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.badlogic.gdx.math.MathUtils.random;
-
 public class MovementBotsHandler implements Handler {
-    private final Collection<MoveCommand> moveCommands = new ArrayList<>();
+    private final ModelZooKeeper modelZooKeeper;
 
     public MovementBotsHandler(ModelZooKeeper modelZooKeeper) {
-        for (TankLogicModel botTankLogicModel: modelZooKeeper.getBotTankModels().keySet()) {
-            moveCommands.add(new MoveCommand(modelZooKeeper.getBotTankModels().get(botTankLogicModel),
-                            botTankLogicModel, Direction.NULL));
-        }
+        this.modelZooKeeper = modelZooKeeper;
     }
 
     @Override
     public void handleInput() {
-        chooseDirections();
-        for (MoveCommand moveCommand: moveCommands) {
-            moveCommand.execute();
+        Collection<MoveTankCommand> moveTankCommands = new ArrayList<>();
+        for (TankLogicModel botTankLogicModel: modelZooKeeper.getBotTankModels().keySet()) {
+            moveTankCommands.add(new MoveTankCommand(modelZooKeeper.getBotTankModels().get(botTankLogicModel),
+                    botTankLogicModel, Direction.NULL));
+        }
+
+        chooseDirections(moveTankCommands);
+        for (MoveTankCommand moveTankCommand : moveTankCommands) {
+            moveTankCommand.execute();
         }
     }
 
-    private void chooseDirections() {
+    private void chooseDirections(Collection<MoveTankCommand> moveTankCommands) {
         Direction[] directions = Direction.values();
-        for (MoveCommand moveCommand: moveCommands) {
+        for (MoveTankCommand moveTankCommand : moveTankCommands) {
             int randomIndex = random.nextInt(directions.length);
             IDirection targetDirection = directions[randomIndex];
-            moveCommand.setDirection(targetDirection);
+            moveTankCommand.setDirection(targetDirection);
         }
     }
 }

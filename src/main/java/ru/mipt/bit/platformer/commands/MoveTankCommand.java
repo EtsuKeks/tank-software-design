@@ -4,12 +4,12 @@ import ru.mipt.bit.platformer.graphicmodels.IGraphicModel;
 import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
 import ru.mipt.bit.platformer.util.IDirection;
 
-public class MoveCommand implements Command {
+public class MoveTankCommand implements Command {
     private final TankLogicModel tankLogicModel;
     private final IGraphicModel tankGraphicModel;
     private IDirection direction;
 
-    public MoveCommand(IGraphicModel tankGraphicModel, TankLogicModel tankLogicModel, IDirection direction) {
+    public MoveTankCommand(IGraphicModel tankGraphicModel, TankLogicModel tankLogicModel, IDirection direction) {
         this.tankGraphicModel = tankGraphicModel;
         this.tankLogicModel = tankLogicModel;
         this.direction = direction;

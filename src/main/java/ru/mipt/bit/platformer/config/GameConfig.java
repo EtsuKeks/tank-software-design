@@ -3,6 +3,7 @@ package ru.mipt.bit.platformer.config;
 public class GameConfig {
     public float tankMovementSpeed;
     public float bulletMovementSpeed;
+    public float bulletDefaultDamage;
     public String tankTexturePath;
     public String treeTexturePath;
     public String bulletTexturePath;

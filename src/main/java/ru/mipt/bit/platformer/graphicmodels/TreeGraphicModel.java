@@ -20,6 +20,12 @@ public class TreeGraphicModel implements IGraphicModel {
         this.rotation = 0f;
     }
 
+    @Override
+    public float getRotation() {
+        return rotation;
+    }
+
+    @Override
     public void setRotation(float rotation) {
         this.rotation = rotation;
     }
