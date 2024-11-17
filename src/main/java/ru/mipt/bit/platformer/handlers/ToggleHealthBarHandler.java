@@ -1,5 +1,7 @@
 package ru.mipt.bit.platformer.handlers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.mipt.bit.platformer.commands.ToggleHealthBarCommand;
 import ru.mipt.bit.platformer.graphicmodels.IGraphicModel;
 import ru.mipt.bit.platformer.modelinitializers.ModelZooKeeper;
@@ -9,9 +11,11 @@ import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Service
 public class ToggleHealthBarHandler implements Handler {
     private final ToggleHealthBarCommand toggleHealthBarCommand;
 
+    @Autowired
     public ToggleHealthBarHandler(ModelZooKeeper modelZooKeeper) {
         Collection<IGraphicModel> tankGraphicModels = new ArrayList<>(modelZooKeeper.getBotTankModels().values());
         tankGraphicModels.add(modelZooKeeper.getPlayerTankGraphicModel());

@@ -9,12 +9,15 @@ import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
 import ru.mipt.bit.platformer.logicmodels.TreeLogicModel;
 import ru.mipt.bit.platformer.util.TileMovement;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import java.io.IOException;
 import java.util.*;
 
+@Service
 public class ModelZooKeeper {
     public final GameConfig config;
 
@@ -25,8 +28,9 @@ public class ModelZooKeeper {
     private final Map<BulletLogicModel, IGraphicModel> bulletModels = new HashMap<>();
     private final Collection<Obstacle> obstacles = new ArrayList<>();
 
-    public ModelZooKeeper(String configFilePath, TiledMapTileLayer groundLayer, TileMovement tileMovement) throws IOException {
-        config = ConfigLoader.loadConfig(configFilePath);
+    @Autowired
+    public ModelZooKeeper(TiledMapTileLayer groundLayer, TileMovement tileMovement) throws IOException {
+        config = ConfigLoader.loadConfig("config.json");
 
         ModelsInitializer initializer = new ModelsInitializer(this, groundLayer, tileMovement);
         initializer.initialize();

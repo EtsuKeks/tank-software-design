@@ -1,5 +1,7 @@
 package ru.mipt.bit.platformer.handlers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.commands.MoveTankCommand;
 import ru.mipt.bit.platformer.modelinitializers.ModelZooKeeper;
 import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
@@ -10,9 +12,11 @@ import static com.badlogic.gdx.math.MathUtils.random;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Component
 public class MovementBotsHandler implements Handler {
     private final ModelZooKeeper modelZooKeeper;
 
+    @Autowired
     public MovementBotsHandler(ModelZooKeeper modelZooKeeper) {
         this.modelZooKeeper = modelZooKeeper;
     }

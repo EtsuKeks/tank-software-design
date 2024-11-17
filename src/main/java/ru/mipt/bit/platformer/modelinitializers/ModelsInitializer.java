@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.mipt.bit.platformer.config.ConfigLoader;
 import ru.mipt.bit.platformer.config.GameConfig;
 
@@ -16,12 +18,14 @@ import ru.mipt.bit.platformer.logicmodels.TreeLogicModel;
 import ru.mipt.bit.platformer.util.GdxGameUtils;
 import ru.mipt.bit.platformer.util.TileMovement;
 
+@Service
 public class ModelsInitializer {
     private final GameConfig config;
     private final ModelZooKeeper modelZooKeeper;
     private final TiledMapTileLayer groundLayer;
     private final TileMovement tileMovement;
 
+    @Autowired
     public ModelsInitializer(ModelZooKeeper modelZooKeeper,
                              TiledMapTileLayer groundLayer, TileMovement tileMovement) throws IOException {
         config = modelZooKeeper.getConfig();

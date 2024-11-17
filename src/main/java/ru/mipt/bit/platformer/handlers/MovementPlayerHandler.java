@@ -1,5 +1,7 @@
 package ru.mipt.bit.platformer.handlers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.mipt.bit.platformer.commands.MoveTankCommand;
 import ru.mipt.bit.platformer.modelinitializers.ModelZooKeeper;
 import ru.mipt.bit.platformer.util.Direction;
@@ -7,9 +9,11 @@ import ru.mipt.bit.platformer.util.IDirection;
 
 import com.badlogic.gdx.Gdx;
 
+@Service
 public class MovementPlayerHandler implements Handler {
     private final MoveTankCommand moveTankCommand;
 
+    @Autowired
     public MovementPlayerHandler(ModelZooKeeper modelZooKeeper) {
         moveTankCommand = new MoveTankCommand(
                 modelZooKeeper.getPlayerTankGraphicModel(),

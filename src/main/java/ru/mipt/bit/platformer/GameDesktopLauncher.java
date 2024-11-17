@@ -1,11 +1,10 @@
 package ru.mipt.bit.platformer;
 
-import static ru.mipt.bit.platformer.util.GdxGameUtils.getSingleLayer;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.createSingleLayerMapRenderer;
 import ru.mipt.bit.platformer.handlers.*;
 import ru.mipt.bit.platformer.modelinitializers.ModelZooKeeper;
-import ru.mipt.bit.platformer.util.TileMovement;
+import ru.mipt.bit.platformer.util.AppConfig;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -15,13 +14,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Interpolation;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 public class GameDesktopLauncher implements ApplicationListener {
     private Batch batch;
@@ -29,27 +23,22 @@ public class GameDesktopLauncher implements ApplicationListener {
     private MapRenderer levelRenderer;
 
     private ModelZooKeeper modelZooKeeper;
-    private final List<Handler> handlers = new ArrayList<>();
+    private final Collection<Handler> handlers = new ArrayList<>();
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        level = new TmxMapLoader().load("level.tmx");
-        levelRenderer = createSingleLayerMapRenderer(level, batch);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        TiledMapTileLayer groundLayer = getSingleLayer(level);
-        TileMovement tileMovement = new TileMovement(groundLayer, Interpolation.smooth);
+        batch = context.getBean(SpriteBatch.class);
+        level = context.getBean(TiledMap.class);
+        levelRenderer = context.getBean(MapRenderer.class);
 
-        try {
-            modelZooKeeper = new ModelZooKeeper("config.json", groundLayer, tileMovement);
-            handlers.add(new ToggleHealthBarHandler(modelZooKeeper));
-            handlers.add(new MovementPlayerHandler(modelZooKeeper));
-            handlers.add(new MovementBotsHandler(modelZooKeeper));
-            handlers.add(new ShootPlayerHandler(modelZooKeeper, groundLayer, tileMovement));
-            handlers.add(new MovementBulletHandler(modelZooKeeper));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        modelZooKeeper = context.getBean(ModelZooKeeper.class);
+        handlers.add(context.getBean(ToggleHealthBarHandler.class));
+        handlers.add(context.getBean(MovementPlayerHandler.class));
+        handlers.add(context.getBean(MovementBotsHandler.class));
+        handlers.add(context.getBean(ShootPlayerHandler.class));
+        handlers.add(context.getBean(MovementBulletHandler.class));
     }
 
     @Override
@@ -69,7 +58,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     }
 
     private void handleInput() {
-        for (Handler handler: handlers) {
+        for (Handler handler : handlers) {
             handler.handleInput();
         }
     }

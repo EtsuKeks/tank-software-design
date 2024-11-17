@@ -1,7 +1,7 @@
-import org.apache.tools.ant.taskdefs.condition.Os
-
 plugins {
     id 'application'
+    id 'org.springframework.boot' version '3.3.2'
+    id 'io.spring.dependency-management' version '1.1.6'
 }
 
 apply from: 'versions.gradle'
@@ -11,9 +11,6 @@ version '1.0-SNAPSHOT'
 
 application {
     mainClassName = 'ru.mipt.bit.platformer.GameDesktopLauncher'
-    if (Os.isFamily(Os.FAMILY_MAC)) {
-        applicationDefaultJvmArgs = ['-XstartOnFirstThread']
-    }
 }
 
 repositories {
@@ -25,6 +22,8 @@ dependencies {
     implementation deps.gdx.backend_lwjgl3
     implementation deps.gdx.platform_desktop
     implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework:spring-core'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:3.9.0'
 }
