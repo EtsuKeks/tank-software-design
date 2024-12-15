@@ -63,6 +63,8 @@ public class BotTankModelKeeper extends ModelCreator implements Observer {
             obstacleModelKeeper.obstacleModels.remove(botTankLogicModel);
             graphicModelKeeper.graphicModels.remove(botTankLogicModel);
         }
+
+        botTankLogicModelsToRemove.clear();
     }
 
     public Collection<TankLogicModel> getBotTankLogicModels() {

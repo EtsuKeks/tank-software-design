@@ -66,6 +66,8 @@ public class BulletModelKeeper extends ModelCreator implements Observer {
             bulletLogicModels.remove(bulletLogicModel);
             graphicModelKeeper.graphicModels.remove(bulletLogicModel);
         }
+
+        bulletLogicModelsToRemove.clear();
     }
 
     public Collection<BulletLogicModel> getBulletLogicModels() {
