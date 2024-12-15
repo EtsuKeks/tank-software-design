@@ -7,17 +7,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class TankGraphicModel implements IGraphicModel {
     private final Texture texture;
     private final TextureRegion graphics;
     private final Rectangle rectangle;
-    private float rotation;
+    private final AtomicReference<Float> rotation;
 
-    public TankGraphicModel(Rectangle rectangle, String texturePath) {
+    public TankGraphicModel(Rectangle rectangle, AtomicReference<Float> rotation, String texturePath) {
         this.texture = new Texture(texturePath);
         this.graphics = new TextureRegion(texture);
         this.rectangle = rectangle;
-        this.rotation = 0f;
+        this.rotation = rotation;
     }
 
     public Rectangle getRectangle() {
@@ -25,22 +27,12 @@ public class TankGraphicModel implements IGraphicModel {
     }
 
     @Override
-    public float getRotation() {
-        return rotation;
-    }
-
-    @Override
-    public void setRotation(float rotation) {
-        this.rotation = rotation;
+    public void render(Batch batch) {
+        drawTextureRegionUnscaled(batch, graphics, rectangle, rotation.get());
     }
 
     @Override
     public void dispose() {
         texture.dispose();
-    }
-
-    @Override
-    public void render(Batch batch) {
-        drawTextureRegionUnscaled(batch, graphics, rectangle, rotation);
     }
 }

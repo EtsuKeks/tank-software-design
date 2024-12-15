@@ -1,24 +1,27 @@
 package ru.mipt.bit.platformer.graphicmodels;
 
 import ru.mipt.bit.platformer.graphicmodels.texturefactories.TextureFactory;
-import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class HealthBarDecorator implements IGraphicModel {
     private final TankGraphicModel tankGraphicModel;
-    private final TankLogicModel tankLogicModel;
-    private boolean healthBarVisible = true;
+    private final AtomicReference<Float> healthRatio;
+    private AtomicReference<Boolean> healthBarVisible = new AtomicReference<>(true);
 
-    public HealthBarDecorator(TankGraphicModel tankGraphicModel, TankLogicModel tankLogicModel) {
+    public HealthBarDecorator(TankGraphicModel tankGraphicModel, AtomicReference<Float> healthRatio) {
         this.tankGraphicModel = tankGraphicModel;
-        this.tankLogicModel = tankLogicModel;
+        this.healthRatio = healthRatio;
+    }
+
+    public void setHealthBarVisible(AtomicReference<Boolean> healthBarVisible) {
+        this.healthBarVisible = healthBarVisible;
     }
 
     private void renderHealthBar(Batch batch) {
-        float healthPercentage = tankLogicModel.getHealthRatio();
-
         float barWidth = tankGraphicModel.getRectangle().width;
         float barHeight = 5;
         float x = tankGraphicModel.getRectangle().x;
@@ -28,36 +31,22 @@ public class HealthBarDecorator implements IGraphicModel {
         batch.draw(TextureFactory.getSolidColorTexture(Color.RED), x, y, barWidth, barHeight);
 
         batch.setColor(Color.GREEN);
-        batch.draw(TextureFactory.getSolidColorTexture(Color.GREEN), x, y, barWidth * healthPercentage, barHeight);
+        batch.draw(TextureFactory.getSolidColorTexture(Color.GREEN), x, y, barWidth * healthRatio.get(), barHeight);
 
         batch.setColor(Color.WHITE);
-    }
-
-    public void toggleHealthBarVisibility() {
-        healthBarVisible = !healthBarVisible;
-    }
-
-    @Override
-    public float getRotation() {
-        return tankGraphicModel.getRotation();
-    }
-
-    @Override
-    public void setRotation(float rotation) {
-        tankGraphicModel.setRotation(rotation);
-    }
-
-    @Override
-    public void dispose() {
-        tankGraphicModel.dispose();
     }
 
     @Override
     public void render(Batch batch) {
         tankGraphicModel.render(batch);
 
-        if (healthBarVisible) {
+        if (healthBarVisible.get()) {
             renderHealthBar(batch);
         }
+    }
+
+    @Override
+    public void dispose() {
+        tankGraphicModel.dispose();
     }
 }

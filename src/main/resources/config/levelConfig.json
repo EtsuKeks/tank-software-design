@@ -1,0 +1,9 @@
+{
+  "levelType": "file",
+  "levelDescPath": "levelModels.txt",
+  "mapSize": { "width": 10, "height": 8 },
+  "treesMinCount": 10,
+  "treesMaxCount": 15,
+  "botTanksMinCount": 5,
+  "botTanksMaxCount": 10
+}

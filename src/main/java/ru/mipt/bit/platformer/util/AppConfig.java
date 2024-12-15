@@ -11,12 +11,21 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.mipt.bit.platformer.handlers.*;
-import ru.mipt.bit.platformer.modelinitializers.ModelZooKeeper;
+import ru.mipt.bit.platformer.commands.Handler;
+import ru.mipt.bit.platformer.config.ConfigLoader;
+import ru.mipt.bit.platformer.config.GameConfig;
+import ru.mipt.bit.platformer.keepers.*;
+import ru.mipt.bit.platformer.modelinitializers.ModelsInitializer;
+
 import java.io.IOException;
 
 @Configuration
 public class AppConfig {
+    @Bean
+    public GameConfig gameConfig() throws IOException {
+        return ConfigLoader.loadConfig("config");
+    }
+
     @Bean
     public SpriteBatch spriteBatch() {
         return new SpriteBatch();
@@ -43,31 +52,54 @@ public class AppConfig {
     }
 
     @Bean
-    public ModelZooKeeper modelZooKeeper(TiledMapTileLayer tiledMapTileLayer, TileMovement tileMovement) throws IOException {
-        return new ModelZooKeeper(tiledMapTileLayer, tileMovement);
+    public ObstacleModelKeeper obstacleModelKeeper() {
+        return new ObstacleModelKeeper();
     }
 
     @Bean
-    public ToggleHealthBarHandler toggleHealthBarHandler(ModelZooKeeper modelZooKeeper) {
-        return new ToggleHealthBarHandler(modelZooKeeper);
+    public GraphicModelKeeper graphicModelKeeper() {
+        return new GraphicModelKeeper();
     }
 
     @Bean
-    public MovementPlayerHandler movementPlayerHandler(ModelZooKeeper modelZooKeeper) {
-        return new MovementPlayerHandler(modelZooKeeper);
+    public PlayerTankModelKeeper playerTankModelKeeper(GameConfig gameConfig, ObstacleModelKeeper obstacleModelKeeper,
+                                                       GraphicModelKeeper graphicModelKeeper, TiledMapTileLayer tiledMapTileLayer,
+                                                       TileMovement tileMovement) {
+        return new PlayerTankModelKeeper(gameConfig, obstacleModelKeeper, graphicModelKeeper, tiledMapTileLayer, tileMovement);
     }
 
     @Bean
-    public MovementBotsHandler movementBotsHandler(ModelZooKeeper modelZooKeeper) {
-        return new MovementBotsHandler(modelZooKeeper);
+    public BotTankModelKeeper botTankModelKeeper(GameConfig gameConfig, ObstacleModelKeeper obstacleModelKeeper,
+                                                 GraphicModelKeeper graphicModelKeeper, TiledMapTileLayer tiledMapTileLayer,
+                                                 TileMovement tileMovement) {
+        return new BotTankModelKeeper(gameConfig, obstacleModelKeeper, graphicModelKeeper, tiledMapTileLayer, tileMovement);
     }
 
     @Bean
-    public ShootPlayerHandler shootPlayerHandler(ModelZooKeeper modelZooKeeper, TiledMapTileLayer tiledMapTileLayer, TileMovement tileMovement) {
-        return new ShootPlayerHandler(modelZooKeeper, tiledMapTileLayer, tileMovement);
+    public BulletModelKeeper bulletModelKeeper(GameConfig gameConfig, PlayerTankModelKeeper playerTankModelKeeper,
+                                               ObstacleModelKeeper obstacleModelKeeper, GraphicModelKeeper graphicModelKeeper,
+                                               TiledMapTileLayer tiledMapTileLayer, TileMovement tileMovement) {
+        return new BulletModelKeeper(gameConfig, playerTankModelKeeper, obstacleModelKeeper, graphicModelKeeper,
+                tiledMapTileLayer, tileMovement);
     }
 
-    @Bean MovementBulletHandler movementBulletHandler(ModelZooKeeper modelZooKeeper) {
-        return new MovementBulletHandler(modelZooKeeper);
+    @Bean
+    public TreeModelKeeper treeModelKeeper(GameConfig gameConfig, ObstacleModelKeeper obstacleModelKeeper,
+                                           GraphicModelKeeper graphicModelKeeper, TiledMapTileLayer tiledMapTileLayer) {
+        return new TreeModelKeeper(gameConfig, obstacleModelKeeper, graphicModelKeeper, tiledMapTileLayer);
+    }
+
+    @Bean
+    public ModelsInitializer modelsInitializer(GameConfig gameConfig, BotTankModelKeeper botTankModelKeeper,
+                                               PlayerTankModelKeeper playerTankModelKeeper, TreeModelKeeper treeModelKeeper,
+                                               ObstacleModelKeeper obstacleModelKeeper) throws IOException {
+        return new ModelsInitializer(gameConfig, botTankModelKeeper, playerTankModelKeeper,
+                treeModelKeeper, obstacleModelKeeper);
+    }
+
+    @Bean
+    public Handler handler(BotTankModelKeeper botTankModelKeeper, BulletModelKeeper bulletModelKeeper,
+                   PlayerTankModelKeeper playerTankModelKeeper, GraphicModelKeeper graphicModelKeeper) {
+        return new Handler(botTankModelKeeper, bulletModelKeeper, playerTankModelKeeper, graphicModelKeeper);
     }
 }

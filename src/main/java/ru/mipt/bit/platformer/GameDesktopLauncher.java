@@ -1,7 +1,8 @@
 package ru.mipt.bit.platformer;
 
-import ru.mipt.bit.platformer.handlers.*;
-import ru.mipt.bit.platformer.modelinitializers.ModelZooKeeper;
+import ru.mipt.bit.platformer.commands.Handler;
+import ru.mipt.bit.platformer.keepers.GraphicModelKeeper;
+import ru.mipt.bit.platformer.modelinitializers.ModelsInitializer;
 import ru.mipt.bit.platformer.util.AppConfig;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -14,16 +15,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import java.util.ArrayList;
-import java.util.Collection;
+
+import java.io.IOException;
 
 public class GameDesktopLauncher implements ApplicationListener {
     private Batch batch;
     private TiledMap level;
     private MapRenderer levelRenderer;
-
-    private ModelZooKeeper modelZooKeeper;
-    private final Collection<Handler> handlers = new ArrayList<>();
+    private GraphicModelKeeper graphicModelKeeper;
+    private Handler handler;
 
     @Override
     public void create() {
@@ -33,12 +33,8 @@ public class GameDesktopLauncher implements ApplicationListener {
         level = context.getBean(TiledMap.class);
         levelRenderer = context.getBean(MapRenderer.class);
 
-        modelZooKeeper = context.getBean(ModelZooKeeper.class);
-        handlers.add(context.getBean(ToggleHealthBarHandler.class));
-        handlers.add(context.getBean(MovementPlayerHandler.class));
-        handlers.add(context.getBean(MovementBotsHandler.class));
-        handlers.add(context.getBean(ShootPlayerHandler.class));
-        handlers.add(context.getBean(MovementBulletHandler.class));
+        graphicModelKeeper = context.getBean(GraphicModelKeeper.class);
+        handler = context.getBean(Handler.class);
     }
 
     @Override
@@ -52,15 +48,13 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         batch.begin();
 
-        modelZooKeeper.render(batch);
+        graphicModelKeeper.render(batch);
 
         batch.end();
     }
 
     private void handleInput() {
-        for (Handler handler : handlers) {
-            handler.handleInput();
-        }
+        handler.handleInput();
     }
 
     @Override
@@ -77,7 +71,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void dispose() {
-        modelZooKeeper.dispose();
+        graphicModelKeeper.dispose();
         level.dispose();
         batch.dispose();
     }

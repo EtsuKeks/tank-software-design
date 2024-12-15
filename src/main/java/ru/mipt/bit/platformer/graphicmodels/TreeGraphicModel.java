@@ -11,32 +11,20 @@ public class TreeGraphicModel implements IGraphicModel {
     private final Texture texture;
     private final TextureRegion graphics;
     private final Rectangle rectangle;
-    private float rotation;
 
     public TreeGraphicModel(Rectangle rectangle, String texturePath) {
         this.texture = new Texture(texturePath);
         this.graphics = new TextureRegion(texture);
         this.rectangle = rectangle;
-        this.rotation = 0f;
     }
 
     @Override
-    public float getRotation() {
-        return rotation;
-    }
-
-    @Override
-    public void setRotation(float rotation) {
-        this.rotation = rotation;
+    public void render(Batch batch) {
+        drawTextureRegionUnscaled(batch, graphics, rectangle, 0f);
     }
 
     @Override
     public void dispose() {
         texture.dispose();
-    }
-
-    @Override
-    public void render(Batch batch) {
-        drawTextureRegionUnscaled(batch, graphics, rectangle, rotation);
     }
 }

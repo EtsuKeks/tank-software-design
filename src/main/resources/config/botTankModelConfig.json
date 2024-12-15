@@ -1,0 +1,7 @@
+{
+  "tankMovementSpeed": 0.4,
+  "bulletMovementSpeed": 0.2,
+  "bulletDefaultDamage": 20.0,
+  "tankTexturePath": "images/tank_blue.png",
+  "bulletTexturePath": "images/bullet.png"
+}

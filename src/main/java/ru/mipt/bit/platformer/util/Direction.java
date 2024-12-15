@@ -3,7 +3,7 @@ package ru.mipt.bit.platformer.util;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.GridPoint2;
 
-public enum Direction implements IDirection {
+public enum Direction {
     UP(Input.Keys.UP, Input.Keys.W, 0, 1, 90f),
     DOWN(Input.Keys.DOWN, Input.Keys.S, 0, -1, -90f),
     LEFT(Input.Keys.LEFT, Input.Keys.A, -1, 0, 180f),
@@ -22,22 +22,18 @@ public enum Direction implements IDirection {
         this.rotation = rotation;
     }
 
-    @Override
     public int getPrimaryKeyCode() {
         return primaryKeyCode;
     }
 
-    @Override
     public int getSecondaryKeyCode() {
         return secondaryKeyCode;
     }
 
-    @Override
     public GridPoint2 getNextCoordinates(GridPoint2 current) {
         return new GridPoint2(current.x + directionVector.x, current.y + directionVector.y);
     }
 
-    @Override
     public float getRotation() {
         return rotation;
     }

@@ -1,29 +1,32 @@
 package ru.mipt.bit.platformer.commands;
 
-import ru.mipt.bit.platformer.graphicmodels.HealthBarDecorator;
-import ru.mipt.bit.platformer.graphicmodels.IGraphicModel;
-
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicReference;
+
+import ru.mipt.bit.platformer.graphicmodels.HealthBarDecorator;
+import ru.mipt.bit.platformer.keepers.BotTankModelKeeper;
+import ru.mipt.bit.platformer.keepers.GraphicModelKeeper;
+import ru.mipt.bit.platformer.keepers.PlayerTankModelKeeper;
+import ru.mipt.bit.platformer.logicmodels.TankLogicModel;
 
 public class ToggleHealthBarCommand implements Command {
-    private final Collection<IGraphicModel> tankGraphicModels;
+    private final AtomicReference<Boolean> healthBarVisible = new AtomicReference<>(true);
 
-    public ToggleHealthBarCommand(Collection<IGraphicModel> tankGraphicModels) {
-        this.tankGraphicModels = tankGraphicModels;
+    public ToggleHealthBarCommand(PlayerTankModelKeeper playerTankModelKeeper,
+                                  BotTankModelKeeper botTankModelKeeper, GraphicModelKeeper graphicModelKeeper) {
+        TankLogicModel playerTankLogicModel = playerTankModelKeeper.getPlayerTankLogicModel();
+        HealthBarDecorator playerTankGraphicModel = (HealthBarDecorator) graphicModelKeeper.graphicModels.get(playerTankLogicModel);
+        playerTankGraphicModel.setHealthBarVisible(healthBarVisible);
+
+        Collection<TankLogicModel> botTankLogicModels = botTankModelKeeper.getBotTankLogicModels();
+        for (TankLogicModel botTankLogicModel: botTankLogicModels) {
+            HealthBarDecorator botTankGraphicModel = (HealthBarDecorator) graphicModelKeeper.graphicModels.get(botTankLogicModel);
+            botTankGraphicModel.setHealthBarVisible(healthBarVisible);
+        }
     }
 
     @Override
     public void execute() {
-        Collection<HealthBarDecorator> tankHealthBarDecorators = new ArrayList<>();
-        for (IGraphicModel tankGraphicModel : tankGraphicModels) {
-            if (tankGraphicModel instanceof HealthBarDecorator) {
-                tankHealthBarDecorators.add((HealthBarDecorator) tankGraphicModel);
-            }
-        }
-
-        for (HealthBarDecorator tankHealthBarDecorator : tankHealthBarDecorators) {
-            tankHealthBarDecorator.toggleHealthBarVisibility();
-        }
+        healthBarVisible.set(!healthBarVisible.get());
     }
 }
